@@ -1,0 +1,6 @@
+tabix MSSNG.vcf.gz chr12:44143557-44388353|bgzip>TMEM117.vcf.gz
+
+tabix mssng_db6.chr3.recal.vcf.gz chr3:126982693-127037389|bgzip>PLXNA1.vcf.gz
+
+gcloud compute scp sph-dev:/home/sph35/mssng/mssng_PLXNA1.vcf.gz . --zone "us-central1-a"
+

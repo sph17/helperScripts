@@ -1,0 +1,23 @@
+gsutil cp gs:// .
+wget https://storage.googleapis.com/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta
+wget https://storage.googleapis.com/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.fai 
+wget https://storage.googleapis.com/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.ref_cache.tar.gz
+
+tar xzf Homo_sapiens_assembly38.ref_cache.tar.gz
+export REF_PATH="$(pwd)/ref/cache/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s"
+export REF_CACHE="$(pwd)/ref/cache/%2s/%2s/%s"
+
+samtools index $cram
+
+samtools view SSC06342.final.cram chr13:70138353-70140428 -o SSC06342_chr13_subset.cram
+
+export REF_PATH="$(pwd)/ref/cache/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s"
+export REF_CACHE="$(pwd)/ref/cache/%2s/%2s/%s"
+samtools view SSC06342.final.cram chr18:55585000-55587300 -o SSC06342_chr18_subset.cram
+
+...
+
+{command that was generating the '[W::find_file_url] Failed to open reference..' error}
+
+
+gcloud compute scp --recurse sph-dev:/home/sph35/str/newest_subset/ . --zone "us-central1-a"

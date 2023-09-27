@@ -1,0 +1,11 @@
+#Remove json formatting
+
+awk -F'"' -v OFS='' '{ for (i=1; i<=NF; i+=1) gsub(",", "\n", $i) } 1' af.txt > af2.txt
+
+#convert to json formatting
+
+awk '{ printf "\"%s\",\n", $1 }' af2.txt | tr -d '\n' > output.txt
+awk -v RS='\r\n' '{ printf "\"%s\",\n", $1 }' newfilename.txt | less -S #Removes ^M in file
+
+#remove empty lines
+sed '/^[[:space:]]*$/d' af.txt > af2.txt

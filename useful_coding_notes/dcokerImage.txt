@@ -1,0 +1,15 @@
+# build image using current directory
+docker build --no-cache -t <IMAGENAME>:<TAG> .
+# tag it to my dockerhub username
+docker tag <IMAGENAME>:<TAG> <DOCKERHUB USERNAME>/<IMAGENAME>:<TAG>
+# push to dockerhub
+docker push <DOCKERHUB USERNAME>/<IMAGENAME>:<TAG>
+
+
+~/fastq-downsample/
+
+docker build --no-cache -t downsample:latest .
+docker tag downsample:latest sphao/downsample:latest
+docker push sphao/downsample:latest
+
+docker run -v '/Users/sph35/Dropbox (Partners HealthCare)/MGH/Terra/downSampling':/test -it sphao/downsample:latest

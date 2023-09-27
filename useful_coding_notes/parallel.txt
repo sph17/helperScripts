@@ -1,0 +1,10 @@
+#Test:
+for sample in `cat test.files`; do id=$(basename -s .txt.gz $sample); echo "gsutil -m cp $sample .; tabix -f -s1 -b 2 -e 2 $id.txt.gz; gsutil -m cp $id.txt.gz.tbi gs://fc-545eca01-311b-4271-bc2f-a7dce28387c5/disc/; rm $id.txt.gz; rm $id.txt.gz.tbi"; done 
+
+#One Sample Test:
+for sample in `cat disc.files`; do id=$(basename -s .txt.gz $sample); echo "gsutil -m cp $sample .; tabix -f -s1 -b 2 -e 2 $id.txt.gz; gsutil -m cp $id.txt.gz.tbi gs://fc-545eca01-311b-4271-bc2f-a7dce28387c5/disc/; rm $id.txt.gz; rm $id.txt.gz.tbi"; done | parallel -j 16 --joblog test1_parallel.log
+
+#To run:
+for sample in `cat disc.files`; do id=$(basename -s .txt.gz $sample); echo "gsutil -m cp $sample .; tabix -f -s1 -b 2 -e 2 $id.txt.gz; gsutil -m cp $id.txt.gz.tbi gs://fc-545eca01-311b-4271-bc2f-a7dce28387c5/disc/; rm $id.txt.gz; rm $id.txt.gz.tbi"; done | parallel -j 36 --joblog disc_idx_parallel.log
+
+for sample in `cat split.files`; do id=$(basename -s .txt.gz $sample); echo "gsutil -m cp $sample .; tabix -f -s1 -b 2 -e 2 $id.txt.gz; gsutil -m cp $id.txt.gz.tbi gs://fc-545eca01-311b-4271-bc2f-a7dce28387c5/split/; rm $id.txt.gz; rm $id.txt.gz.tbi"; done | parallel -j 36 --joblog split_idx_parallel.log

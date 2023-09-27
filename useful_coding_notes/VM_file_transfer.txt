@@ -1,0 +1,7 @@
+To transfer from VM to Erisone/local computer: 
+
+gcloud compute scp alba-dev:/home/an436/scratch/data/ENG_AVT_001_D1/ENG_AVT_001_D1.ROI.bam.bai . --zone "us-central1-a"
+
+gcloud compute scp steph-1:/home/sph35/chrx . --recurse --zone "us-central1-a"
+
+

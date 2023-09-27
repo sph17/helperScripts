@@ -1,0 +1,5 @@
+#Add permissions locally
+chmod -R a+rwx /local/dir/with/inputs/
+
+# Start with latest docker and mount folder
+sudo docker run -t -i -v /local/dir/with/inputs/:/opt/vep/.vep/denovo gcr.io/neural-tangent-298217/ensembl-vep:sph-v2.2

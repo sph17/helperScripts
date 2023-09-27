@@ -1,0 +1,9 @@
+hailctl dataproc start qc-noteboo1 --project gnomad-sv-v3-w1 --num-secondary-workers 50 --region=us-central1 --zone=us-central1-b --packages gnomad --master-machine-type n1-highmem-8 --worker-machine-type n1-highmem-8 --big-executors
+
+hailctl dataproc start qc-noteboo1 --project gnomad-sv-v3-w1 --num-secondary-workers 50 --region=us-central1 --zone=us-central1-b --packages gnomad --master-machine-type n1-highmem-8 --worker-machine-type n1-highmem-8 --big-executors
+
+
+hailctl dataproc start qc-notebook1 --project gnomad-sv-v3-w1 --num-secondary-workers 50 --region=us-central1 --zone=us-central1-b --packages gnomad --master-machine-type n1-highmem-8 --worker-machine-type n1-highmem-8 --big-executors
+
+
+gcloud dataproc clusters delete qc-noteboo1 --region=us-central1

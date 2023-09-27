@@ -1,0 +1,19 @@
+gsutil ls -lhr gs://... > manifest.txt
+grep "fastq$" manifest.txt | awk '{print $4}' > fastq_paths.txt
+grep "final_downsample_rg_sorted.bam$" manifest.txt | awk '{print $4}' > rg_paths.txt
+grep "final_downsample_markdup.cram$" manifest.txt | awk '{print $4}' > mkdup_paths.txt
+grep "final_downsample.bam$" manifest.txt | awk '{print $4}' > ds_paths.txt 
+
+cat bam_paths.txt | xargs -n1 -I {} sh -c 'echo {}; gsutil rm -{}'
+<OR>
+cat fastq_paths.txt | gsutil -m rm -I 
+
+
+gsutil ls -lhr gs://fc-secure-73b03324-5942-46c4-8d98-ef481d1d289a/8d731777-2dde-4602-91af-d50fd85deb9f/collectWgsMetrics > manifest.txt
+grep "coverage.txt$" manifest.txt | awk '{print $4}' > wgs_paths.txt
+
+cat wgs_paths.txt | gsutil -m cp -I gs://talkowski-sph-downsample-output/original_cram_coverage_metrics
+
+cat gvcf_tbi_paths.txt | gsutil -u prenatal-wgs -m cp -I gs://fc-81abf433-f373-4cdf-b3e8-1a699e73dd4c/1kgp
+
+cat 7k_gnomad_bincovs.txt | gsutil -m cp -I gs://fc-5e80ede2-9204-4178-ba7a-10d58a9fd229/gnomad-raw-callers/counts/ 

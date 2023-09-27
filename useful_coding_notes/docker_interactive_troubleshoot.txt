@@ -1,0 +1,15 @@
+To reliably reproduce errors, always use a Docker container
+> docker pull <repo>/<name>:<tag>
+> docker images # Find image ID
+> docker run –it <image_ID> /bin/bash
+> gcloud auth login  # Before downloading files
+
+
+docker run -it scramble:latest /bin/bash
+
+in local directory, run docker ps to find docker ID
+
+docker cp /Users/sph35/cromwell/cromwell-executions/myWorkflow/1e8127f8-24a3-4030-9e72-51f27aff4dd2/call-myTask/execution/clusters.txt dc230cc037fd:/scratch/
+
+docker container prune to clear memory used by images currently running
+

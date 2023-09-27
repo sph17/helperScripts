@@ -1,0 +1,3 @@
+for file in *.txt.gz; do tabix -f -s1 -b2 -e0 -0 $file; rm $file; done 
+
+while read f; do gsutil -m cp ${f} .; file=$(basename $f); tabix -f -s1 -b2 -e0 -0 $file; rm $file; done < files.txt

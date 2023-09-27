@@ -1,0 +1,11 @@
+wget https://storage.googleapis.com/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta
+wget https://storage.googleapis.com/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta.fai 
+wget https://storage.googleapis.com/gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.ref_cache.tar.gz
+
+tar xzf Homo_sapiens_assembly38.ref_cache.tar.gz
+export REF_PATH="$(pwd)/ref/cache/%2s/%2s/%s:http://www.ebi.ac.uk/ena/cram/md5/%s"
+export REF_CACHE="$(pwd)/ref/cache/%2s/%2s/%s"
+
+...
+
+{command that was generating the '[W::find_file_url] Failed to open reference..' error}

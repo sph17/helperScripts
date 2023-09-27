@@ -1,0 +1,5 @@
+python3 export_large_tsv.py -p talkowksi_prenatal_ndd_WGS -w gatk-sv-pipeline-ASD-prenatal_NDD_billing -e sample_set -f outliers_filtered.tsv -a outlier_samples_excluded_file
+
+/Users/sph35/Dropbox\ \(Partners\ HealthCare\)/MGH/GATK-SV/scripts/export_large_tsv.py
+
+cat plots.txt | gsutil -m cp -I ./svplots_1000/

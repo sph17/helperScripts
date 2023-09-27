@@ -1,0 +1,2 @@
+$ tabix -p vcf file.vcf.gz ##tbi index
+$ bcftools index file.vcf.gz ##csi index

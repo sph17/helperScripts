@@ -1,0 +1,177 @@
+https://docs.globus.org/cli/quickstart/
+
+globus login
+
+globus ls 'd774e92e-c7fd-11e8-8c5a-0a1d4c5c824a:/' #SFARI UUID
+
+globus ls 'd774e92e-c7fd-11e8-8c5a-0a1d4c5c824a:/SPARK/pub/WGS4/wgs_cram/0/' >> ./Desktop/spark_wgs4.txt
+
+globus ls 'd774e92e-c7fd-11e8-8c5a-0a1d4c5c824a:/SPARK/pub/WGS3/wgs_cram/0/' >> ./Desktop/spark_wgs3.txt
+
+globus ls 'd774e92e-c7fd-11e8-8c5a-0a1d4c5c824a:/SPARK/pub/WGS2/wgs_cram/0/' >> ./Desktop/spark_wgs2.txt
+
+#For File Transfer on VM 
+#Follow Jack's Script to set up VM 
+### Storage location -> gs://spark-raw [us central]
+### Make sure to set up screen so the ssh session persists and the endpoint remains on
+sudo apt install screen
+##Install gsutil https://cloud.google.com/storage/docs/gsutil_install
+sudo apt-get install apt-transport-https ca-certificates gnupg
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+sudo apt-get update && sudo apt-get install google-cloud-cli
+glcoud init 
+gcloud auth login --no-launch-browser
+screen -S transfer
+
+##################################################################################
+### Installing Globus-CLI
+##################################################################################
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+sudo apt update
+sudo apt install python3.7 python3-dev python3-venv
+
+sudo python3.y get-pip.py
+sudo apt install python-pip
+pip3 install --upgrade --user globus-cli
+PATH=/home/sph35/.local/bin:$PATH
+export PATH
+
+##################################################################################
+### Install java
+##################################################################################
+sudo apt-get update
+sudo apt install default-jdk
+Y
+
+
+##################################################################################
+### Login to globus
+##################################################################################
+globus login
+
+##################################################################################
+### Create globus endpoint and start connection
+##################################################################################
+NODE_NAME="NODE_NAME1"
+globus endpoint create --personal $NODE_NAME > ~/endpoint_info.txt
+endpoint_id=$(cat ~/endpoint_info.txt | sed -n 2p | sed -e "s/^Endpoint ID: //")
+setup_id=$(cat ~/endpoint_info.txt | sed -n 3p | sed -e "s/^Setup Key: //")
+
+sudo apt install wget
+
+cd
+wget https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz
+tar xzf globusconnectpersonal-latest.tgz
+cd globusconnectpersonal-3.1.6/
+./globusconnectpersonal -setup $setup_id
+./globusconnectpersonal -start &
+# ./globusconnectpersonal -stop
+
+##################################################################################
+### Batched jobs
+##################################################################################
+cd
+#echo "" > ~/samples_failed.txt
+origin=98f73ff6-b423-11ec-bae0-cd8db799a66a
+destination=$endpoint_id
+
+#add cram/crai paths into file
+vi manifest.txt 
+
+sudo apt-get install dos2unix
+dos2unix manifest.txt 
+
+# file="/home/sph35/manifest.txt"
+# while read file ; do
+# sample=$(basename $file);
+# echo $sample;
+# echo $file;
+# task_id=$(globus transfer d774e92e-c7fd-11e8-8c5a-0a1d4c5c824a:$file fbcd50d6-a530-11ec-bf8d-ab28bf5d96bb:/~/$sample --notify failed --jmespath 'task_id');
+# task_id="${task_id%\"}"; task_id="${task_id#\"}";
+# echo $task_id;
+# ### Wait for task termination;
+# globus task wait --heartbeat --polling-interval 60 "$task_id";
+# gsutil cp /home/sph35/$sample gs://fc-5e80ede2-9204-4178-ba7a-10d58a9fd229/spark-raw-us/crams/wgs2/;
+# echo "finished $sample";
+# rm /home/sph35/$sample;
+# done < $file    
+
+#Check Status of Connection
+#cd globusconnectpersonal-3.1.6/; ./globusconnectpersonal -status; cd
+file="/home/sph35/manifest.txt"
+while read file ; do
+sample=$(basename $file);
+echo $sample;
+echo $file;
+task_id=$(globus transfer 98f73ff6-b423-11ec-bae0-cd8db799a66a:$file $destination:/~/$sample --notify failed --jmespath 'task_id');
+task_id="${task_id%\"}"; task_id="${task_id#\"}";
+echo $task_id;
+### Wait for task termination;
+globus task wait --heartbeat --polling-interval 60 "$task_id";
+gsutil -m cp /home/sph35/$sample gs://fc-9f0e06b7-7b7e-4dde-97f0-020b68d7ad6c/spark-raw-us/spark_wgs_3/;
+echo "finished $sample";
+rm /home/sph35/$sample;
+done < $file  
+
+
+
+
+
+
+########
+# Reset up 
+########
+
+screen -S transfer
+
+NODE_NAME="NODE_NAME3"
+globus endpoint create --personal $NODE_NAME > ~/endpoint_info.txt
+endpoint_id=$(cat ~/endpoint_info.txt | sed -n 2p | sed -e "s/^Endpoint ID: //")
+setup_id=$(cat ~/endpoint_info.txt | sed -n 3p | sed -e "s/^Setup Key: //")
+
+cd globusconnectpersonal-3.1.6/
+./globusconnectpersonal -setup $setup_id
+./globusconnectpersonal -start &
+
+cd
+origin=98f73ff6-b423-11ec-bae0-cd8db799a66a
+destination=$endpoint_id
+
+dos2unix manifest.txt 
+
+
+file="/home/sph35/manifest.txt"
+while read file ; do
+sample=$(basename $file);
+echo $sample;
+echo $file;
+task_id=$(globus transfer 98f73ff6-b423-11ec-bae0-cd8db799a66a:$file $destination:/~/$sample --notify failed --jmespath 'task_id');
+task_id="${task_id%\"}"; task_id="${task_id#\"}";
+echo $task_id;
+### Wait for task termination;
+globus task wait --heartbeat --polling-interval 60 "$task_id";
+gsutil -m cp /home/sph35/$sample gs://fc-9f0e06b7-7b7e-4dde-97f0-020b68d7ad6c/spark-raw-us/spark_wgs_3/;
+echo "finished $sample";
+rm /home/sph35/$sample;
+done < $file
+
+
+while read file ; do sample=$(basename $file); echo $sample; echo $file; task_id=$(globus transfer 98f73ff6-b423-11ec-bae0-cd8db799a66a:$file $destination:/~/$sample --notify failed --jmespath 'task_id'); task_id="${task_id%\"}"; task_id="${task_id#\"}"; echo $task_id; globus task wait --heartbeat --polling-interval 60 "$task_id"; gsutil -m cp /home/sph35/$sample gs://fc-9f0e06b7-7b7e-4dde-97f0-020b68d7ad6c/spark-raw-us/spark_wgs_4/; echo "finished $sample"; done < $file
+
+
+
+## Splitting Manifests
+split -l 966 -a 1 wgs4_cram.txt wgs4_
+
+##gvcfs
+file="/home/sph35/manifest.txt"
+
+while read file ; do sample=$(basename $file); echo $sample; echo $file; task_id=$(globus transfer 98f73ff6-b423-11ec-bae0-cd8db799a66a:$file $destination:/~/$sample --notify failed --jmespath 'task_id'); task_id="${task_id%\"}"; task_id="${task_id#\"}"; echo $task_id; globus task wait --heartbeat --polling-interval 60 "$task_id"; gsutil -m cp /home/sph35/$sample gs://fc-9f0e06b7-7b7e-4dde-97f0-020b68d7ad6c/spark-raw-us/spark_wgs_2/gvcfs/; echo "finished $sample"; rm /home/sph35/$sample; done < $file
+
+##locally
+globus ls 98f73ff6-b423-11ec-bae0-cd8db799a66a:/SPARK/pub/WGS4/wgs_gvcf/0/ > ./Desktop/SPARK/SPARK4/wgs_gvcfs/wgs4-0.txt
+while read line; do echo "/SPARK/pub/WGS4/wgs_gvcf/0/$line"; done < wgs4-0.txt > spark4-0.txt
+
+globus ls -r 98f73ff6-b423-11ec-bae0-cd8db799a66a:/SPARK/pub/WGS3/wgs_pvcf/ | grep ".recalibrated_variants.vcf.gz$" > ./Desktop/spark3-vcfs.txt

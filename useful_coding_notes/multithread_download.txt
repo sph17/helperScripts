@@ -1,0 +1,4 @@
+#install axel to multithread a URL download wget cannot
+
+sudo apt-get install axel
+axel -n 5 url
