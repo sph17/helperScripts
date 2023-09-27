@@ -1,2 +1,5 @@
 # helperScripts
-tiny helper scripts
+Author: Stephanie Hao
+
+tiny helper scripts / tidbit bash notes 
+
