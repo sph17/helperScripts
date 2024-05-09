@@ -1,21 +1,33 @@
 
 snippet header_script
 	#!/usr/bin/env Rscript
-	##################################################
-	## Project/Purpose:
-	## Date:
-	## Author: Stephanie Hao
-	##################################################
+	# ==================================================
+	# Project/Purpose: 
+	# Date: 
+	# Author: Stephanie Hao <sphao@bu.edu>
+	# ==================================================
+	# Usage: 
+	# 
+	#
+	# Arguments:
+	# - 
+	# - 
+	# - 
+	#
+	# Example:
+	# 
+	# ==================================================
 
-
-	source("~/Dropbox (Partners HealthCare)/MGH/helperScripts/utils.R")
+	source("~/gitHub/helperScripts/R/utils.R")
 	library(tidyverse)
 	library(data.table)
+	library(stringr)
 	WD<-""
 	setwd(WD)
 
 snippet comment_block
-	##################################################
-	##  
-	##  
-	##################################################
+	# ==================================================
+	# 
+	# 
+	# 
+	# ==================================================
