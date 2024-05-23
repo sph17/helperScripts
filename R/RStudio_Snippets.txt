@@ -18,7 +18,8 @@ snippet header_script
 	# 
 	# ==================================================
 
-	source("~/gitHub/helperScripts/R/utils.R")
+	source_url <- "https://raw.githubusercontent.com/sph17/helperScripts/main/R/utils.R"
+	source(source_url)
 	library(tidyverse)
 	library(data.table)
 	library(stringr)
