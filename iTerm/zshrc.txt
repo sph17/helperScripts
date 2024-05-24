@@ -1,3 +1,3 @@
-PS1="%{%F{208}%}%n%{%f%}@%{%F{037}%}%m:%{%F{039}%}%~%{$%f%}%  "
+PS1="%{%F{208}%}%n%{%f%}@%{%F{037}%}%m:%{%F{033}%}%~%{$%f%}%  "
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
