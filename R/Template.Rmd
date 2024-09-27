@@ -1,0 +1,52 @@
+---
+title: "tSNE 3 Clusters Pathway Enrichment Analysis"
+author: "Stephanie Hao"
+date: "2024-09-27"
+output: 
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_float:
+      collapsed: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("~/gitHub/helperScripts/R/utils.R")
+library(tidyverse)
+library(data.table)
+library(stringr)
+library(ggplot2)
+library(kableExtra)
+library(reactable)
+library(pheatmap)
+library(pheatmap)
+library(stringr)
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+if (!requireNamespace("limma", quietly = TRUE)) {
+  BiocManager::install("limma", update = FALSE)
+}
+library(limma)
+
+# Set the root directory for all chunks
+knitr::opts_knit$set(root.dir = "/Users/sphao/SynologyDrive/experiments/2024/Stephanie Hao/HIPC/rdata")
+``` 
+
+# Overview
+A description of what is being done here
+
+# Load Data
+```{r}
+getwd()
+
+#load in necessary data
+```
+
+# Title 1
+## Title 2
+
+# Session Info
+```{r}
+sessionInfo()
+```
