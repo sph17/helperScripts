@@ -16,13 +16,16 @@ snippet header_script
 	# Example:
 	# 
 	# ==================================================
-
+	
 	source_url <- "https://raw.githubusercontent.com/sph17/helperScripts/main/R/utils.R"
 	source(source_url)
-	library(tidyverse)
-	library(data.table)
-	library(stringr)
-	WD<-""
+	
+	# Load packages
+	package_list <- c("stringr", "ggplot2", "tidyverse", "data.table")
+	lapply(package_list, install_if_missing)
+	
+	#set working directory
+	WD<-getwd()
 	setwd(WD)
 
 snippet comment_block
