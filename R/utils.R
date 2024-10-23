@@ -22,3 +22,12 @@ display_ansi_colors()
 
 # Optionally, call the function with a specific range
 # display_ansi_colors(28, 47)  # Shades of green
+
+
+# Install missing packages
+install_if_missing <- function(p) {
+  if (!require(p, character.only = TRUE)) {
+    install.packages(p)
+  }
+  library(p, character.only = TRUE)
+}
