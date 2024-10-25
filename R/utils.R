@@ -18,7 +18,7 @@ display_ansi_colors <- function(start = 0, end = 255) {
 }
 
 # Call the function to display all colors
-display_ansi_colors()
+# display_ansi_colors()
 
 # Optionally, call the function with a specific range
 # display_ansi_colors(28, 47)  # Shades of green
