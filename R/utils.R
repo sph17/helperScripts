@@ -26,11 +26,19 @@ display_ansi_colors <- function(start = 0, end = 255) {
 
 # Install missing packages
 install_if_missing <- function(p) {
-  if (!require(p, character.only = TRUE)) {
-    install.packages(p)
+  if (!requireNamespace(p, quietly = TRUE)) {
+    if (p %in% rownames(available.packages())) {
+      install.packages(p)
+    } else {
+      if (!requireNamespace("BiocManager", quietly = TRUE)) {
+        install.packages("BiocManager")
+      }
+      BiocManager::install(p)
+    }
   }
   library(p, character.only = TRUE)
 }
+
 
 # Helper function to save pheatmap to PDF
 save_pheatmap_pdf <- function(x, filename, width = 7, height = 7) {
@@ -41,3 +49,5 @@ save_pheatmap_pdf <- function(x, filename, width = 7, height = 7) {
   grid::grid.draw(x$gtable)
   dev.off()
 }
+
+
