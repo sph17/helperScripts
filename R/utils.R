@@ -33,6 +33,7 @@ install_if_missing <- function(p) {
       if (!requireNamespace("BiocManager", quietly = TRUE)) {
         install.packages("BiocManager")
       }
+      message(paste("Installing", p, "from Bioconductor..."))
       BiocManager::install(p)
     }
   }
