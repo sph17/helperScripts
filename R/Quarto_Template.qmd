@@ -1,7 +1,7 @@
 ---
 title: "BTM vs ImmPort: Gene Overlap"
 author: 
-  name: "Stephanie Hao"
+- name: "Stephanie Hao"
   email: sphao@bu.edu
   affiliation: Boston University
 date: "`r Sys.Date()`"
@@ -39,85 +39,157 @@ This document is an QMD Template.
 ## Set Up
 
 ```{r}
-setwd("/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/")
+# setwd("/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/")
 # Libraries
-library(readr)
-library(dplyr)
-library(ggplot2)
-# install.packages("ggvenn") # if needed
-library(ggvenn)
+# library(readr)
+# library(dplyr)
+# library(ggplot2)
+# # install.packages("ggvenn") # if needed
+# library(ggvenn)
 
 # ---- Paths ----
-btm_path <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/gene_lists/BTM_plus/BTM_Plus_Longform.csv"
-imm_path <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/gene_lists/Immport/immport_all_genes_expanded_wide.csv"
-out_dir  <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/figs"
-
-if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
+# btm_path <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/gene_lists/BTM_plus/BTM_Plus_Longform.csv"
+# imm_path <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/gene_lists/Immport/immport_all_genes_expanded_wide.csv"
+# out_dir  <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/figs"
+# 
+# if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
 
 # ---- Load gene lists ----
-btm_long <- read_csv(btm_path, show_col_types = FALSE)
-imm_long <- read_csv(imm_path, show_col_types = FALSE)
+# btm_long <- read_csv(btm_path, show_col_types = FALSE)
+# imm_long <- read_csv(imm_path, show_col_types = FALSE)
 
 # Expect columns:
 #   BTM: genes
 #   ImmPort: gene_symbol
-stopifnot(all(c("genes") %in% names(btm_long)))
-stopifnot(all(c("gene_symbol", "term_name") %in% names(imm_long)))
+# stopifnot(all(c("genes") %in% names(btm_long)))
+# stopifnot(all(c("gene_symbol", "term_name") %in% names(imm_long)))
 
 # ---- Prepare sets (unique symbols) ----
-btm_genes <- btm_long %>%
-  transmute(gene = as.character(genes)) %>%
-  filter(!is.na(gene), gene != "") %>%
-  distinct() %>%
-  pull(gene)
-
-imm_genes <- imm_long %>%
-  transmute(gene = as.character(gene_symbol)) %>%
-  filter(!is.na(gene), gene != "") %>%
-  distinct() %>%
-  pull(gene)
-
-sets <- list(BTM = btm_genes, ImmPort = imm_genes)
-
-# ---- Quick stats ----
-n_btm     <- length(btm_genes)
-n_imm     <- length(imm_genes)
-n_overlap <- length(intersect(btm_genes, imm_genes))
-
-cat(sprintf("BTM unique genes: %d\n", n_btm))
-cat(sprintf("ImmPort unique genes: %d\n", n_imm))
-cat(sprintf("Overlap: %d\n", n_overlap))
+# btm_genes <- btm_long %>%
+#   transmute(gene = as.character(genes)) %>%
+#   filter(!is.na(gene), gene != "") %>%
+#   distinct() %>%
+#   pull(gene)
+# 
+# imm_genes <- imm_long %>%
+#   transmute(gene = as.character(gene_symbol)) %>%
+#   filter(!is.na(gene), gene != "") %>%
+#   distinct() %>%
+#   pull(gene)
+# 
+# sets <- list(BTM = btm_genes, ImmPort = imm_genes)
+# 
+# # ---- Quick stats ----
+# n_btm     <- length(btm_genes)
+# n_imm     <- length(imm_genes)
+# n_overlap <- length(intersect(btm_genes, imm_genes))
+# 
+# cat(sprintf("BTM unique genes: %d\n", n_btm))
+# cat(sprintf("ImmPort unique genes: %d\n", n_imm))
+# cat(sprintf("Overlap: %d\n", n_overlap))
 ```
 
 ## Venn Diagram
 
 ```{r}
-p <- ggvenn(
-  sets,
-  fill_alpha = 0.6,
-  stroke_size = 0.7,
-  set_name_size = 4
-)
-p
-ggsave(file.path(out_dir, "venn_btm_immport.png"), plot = p, width = 6, height = 5, dpi = 300)
+# p <- ggvenn(
+#   sets,
+#   fill_alpha = 0.6,
+#   stroke_size = 0.7,
+#   set_name_size = 4
+# )
+# p
+# ggsave(file.path(out_dir, "venn_btm_immport.png"), plot = p, width = 6, height = 5, dpi = 300)
 ```
 
 ## Reactable Table Format
 
 ```{r}
-overlap_tbl <- tibble(gene = intersect(btm_genes, imm_genes)) %>% arrange(gene)
-readr::write_csv(overlap_tbl, file.path(out_dir, "overlap_genes_btm_immport.csv"))
-reactable::reactable(
-  overlap_tbl,
-  searchable = TRUE,
-  filterable = FALSE,
-  highlight = TRUE,
-  defaultPageSize = 10,
-  defaultColDef = reactable::colDef(
-    style = list(fontSize = "12px"),
-    format = reactable::colFormat(digits = 0),
-    filterable = TRUE
-  ))
+# overlap_tbl <- tibble(gene = intersect(btm_genes, imm_genes)) %>% arrange(gene)
+# readr::write_csv(overlap_tbl, file.path(out_dir, "overlap_genes_btm_immport.csv"))
+# reactable::reactable(
+#   overlap_tbl,
+#   searchable = TRUE,
+#   filterable = FALSE,
+#   highlight = TRUE,
+#   defaultPageSize = 10,
+#   defaultColDef = reactable::colDef(
+#     style = list(fontSize = "12px"),
+#     format = reactable::colFormat(digits = 0),
+#     filterable = TRUE
+#   ))
 ```
 
-### 
+------------------------------------------------------------------------
+
+*echo* option allows to display the output, but not show the code
+
+```{r}
+#| echo: false
+
+library(MASS)
+data(cats)
+str(cats)
+```
+
+------------------------------------------------------------------------
+
+*eval* option allows to display the code, but not evaluate it. Additionaly, if we set *cold-fold* option to `true`, the code chunk will be displayed and not "folded" under Code arrow:
+
+```{r}
+#| eval: false
+#| code-fold: false
+str(cats)
+```
+
+------------------------------------------------------------------------
+
+## Automatic Figure labeling
+
+@fig-airquality explores the impact of temperature on ozone level.
+
+```{r}
+#| label: fig-airquality
+#| fig-cap: Temperature and ozone level.
+#| warning: false
+
+library(ggplot2)
+data(airquality)
+
+ggplot(airquality, aes(Temp, Ozone)) + 
+  geom_point() + 
+  geom_smooth(method = "loess"
+)
+```
+
+## Code Linking
+
+The *code-link* option in the header enables hyper-linking of functions within code blocks to their online documentation
+
+------------------------------------------------------------------------
+
+## Callouts:
+
+::: callout-note
+The callout-note can be used to draw attention to some information
+:::
+
+::: callout-warning
+The callout-warning can be used for warnings
+:::
+
+::: callout-important
+The callout-important can be to highligh important information
+:::
+
+::: callout-tip
+## Tip with Title
+
+This is an example of a callout with a title.
+:::
+
+::: {.callout-caution collapse="true"}
+## Expand To Learn About Collapse
+
+This is an example of a 'folded' caution callout that can be expanded by the user. You can use `collapse="true"` to collapse it by default or `collapse="false"` to make a collapsible callout that is expanded by default.
+:::
