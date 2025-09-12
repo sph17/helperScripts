@@ -1,0 +1,123 @@
+---
+title: "BTM vs ImmPort: Gene Overlap"
+author: 
+  name: "Stephanie Hao"
+  email: sphao@bu.edu
+  affiliation: Boston University
+date: "`r Sys.Date()`"
+format:
+  html:
+    theme: cerulean
+    toc: true                 # sidebar legend for quick jumps
+    toc-title: "Table of Contents"
+    toc-location: left        # put TOC on the left
+    toc-expand: true          # expand subsections
+    number-sections: true     # optional numbering
+    smooth-scroll: true
+    code-tools: true          # show copy/expand controls
+    code-fold: true          # keep (false) code visible by default, true to hide
+    code-line-numbers: false
+    embed-resources: true
+    css: /Users/sphao/GitHub/helperScripts/R/style.css
+editor: visual
+execute:
+  echo: true                  # show code blocks
+  warning: false
+  message: false
+  cache: false
+freeze: auto
+---
+
+This document is an QMD Template.
+
+# Heading 1
+
+## Heading2
+
+### Heading3
+
+## Set Up
+
+```{r}
+setwd("/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/")
+# Libraries
+library(readr)
+library(dplyr)
+library(ggplot2)
+# install.packages("ggvenn") # if needed
+library(ggvenn)
+
+# ---- Paths ----
+btm_path <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/gene_lists/BTM_plus/BTM_Plus_Longform.csv"
+imm_path <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/gene_lists/Immport/immport_all_genes_expanded_wide.csv"
+out_dir  <- "/Users/sphao/Library/CloudStorage/OneDrive-BostonUniversity/HIPC/Sept2025/figs"
+
+if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
+
+# ---- Load gene lists ----
+btm_long <- read_csv(btm_path, show_col_types = FALSE)
+imm_long <- read_csv(imm_path, show_col_types = FALSE)
+
+# Expect columns:
+#   BTM: genes
+#   ImmPort: gene_symbol
+stopifnot(all(c("genes") %in% names(btm_long)))
+stopifnot(all(c("gene_symbol", "term_name") %in% names(imm_long)))
+
+# ---- Prepare sets (unique symbols) ----
+btm_genes <- btm_long %>%
+  transmute(gene = as.character(genes)) %>%
+  filter(!is.na(gene), gene != "") %>%
+  distinct() %>%
+  pull(gene)
+
+imm_genes <- imm_long %>%
+  transmute(gene = as.character(gene_symbol)) %>%
+  filter(!is.na(gene), gene != "") %>%
+  distinct() %>%
+  pull(gene)
+
+sets <- list(BTM = btm_genes, ImmPort = imm_genes)
+
+# ---- Quick stats ----
+n_btm     <- length(btm_genes)
+n_imm     <- length(imm_genes)
+n_overlap <- length(intersect(btm_genes, imm_genes))
+
+cat(sprintf("BTM unique genes: %d\n", n_btm))
+cat(sprintf("ImmPort unique genes: %d\n", n_imm))
+cat(sprintf("Overlap: %d\n", n_overlap))
+```
+
+## Venn Diagram
+
+```{r}
+p <- ggvenn(
+  sets,
+  fill_alpha = 0.6,
+  stroke_size = 0.7,
+  set_name_size = 4
+)
+p
+ggsave(file.path(out_dir, "venn_btm_immport.png"), plot = p, width = 6, height = 5, dpi = 300)
+```
+
+## Reactable Table Format
+
+```{r}
+overlap_tbl <- tibble(gene = intersect(btm_genes, imm_genes)) %>% arrange(gene)
+readr::write_csv(overlap_tbl, file.path(out_dir, "overlap_genes_btm_immport.csv"))
+reactable::reactable(
+  overlap_tbl,
+  searchable = TRUE,
+  filterable = FALSE,
+  highlight = TRUE,
+  defaultPageSize = 10,
+  defaultColDef = reactable::colDef(
+    style = list(fontSize = "12px"),
+    format = reactable::colFormat(digits = 0),
+    filterable = TRUE
+  ))
+```
+
+### 
