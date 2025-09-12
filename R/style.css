@@ -1,0 +1,24 @@
+/* Shrink global text slightly (16px -> 12px baseline) */
+html { font-size: 12px; }
+
+/* Optional: nudge body smaller still */
+body { font-size: 0.95rem; }
+
+/* Make code & tables a bit tighter */
+pre code, code { font-size: 0.9em; }
+.table, .kable-table { font-size: 0.9em; }
+
+/* Headings scaled down a touch */
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+
+/* Shrink all reactable widgets */
+.reactable { font-size: 0.85rem; }
+
+/* Ensure cells/headers inherit the smaller size */
+.reactable .rt-table th,
+.reactable .rt-table td { font-size: inherit; }
+
+/* Optional: even smaller header text */
+/*.reactable .rt-table th { font-size: 0.95rem; }*/
