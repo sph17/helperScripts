@@ -17,6 +17,7 @@ format:
     code-tools: true          # show copy/expand controls
     code-fold: true          # keep (false) code visible by default, true to hide
     code-line-numbers: false
+    code-link: true
     embed-resources: true
     css: /Users/sphao/GitHub/helperScripts/R/style.css
 editor: visual
@@ -35,6 +36,10 @@ This document is an QMD Template.
 ## Heading2
 
 ### Heading3
+
+## Code Linking
+
+The *code-link* option in the header enables hyper-linking of functions within code blocks to their online documentation
 
 ## Set Up
 
@@ -161,10 +166,6 @@ ggplot(airquality, aes(Temp, Ozone)) +
   geom_smooth(method = "loess"
 )
 ```
-
-## Code Linking
-
-The *code-link* option in the header enables hyper-linking of functions within code blocks to their online documentation
 
 ------------------------------------------------------------------------
 
