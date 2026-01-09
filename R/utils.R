@@ -98,3 +98,4 @@ pretty_kable_summary <- function(x, scroll = TRUE, height = "300px", align = NUL
   )
 }
 
+
