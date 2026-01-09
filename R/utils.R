@@ -84,4 +84,16 @@ pretty_kable <- function(
   kb
 }
 
+pretty_kable_summary <- function(x, scroll = TRUE, height = "300px") {
+  
+  # derive caption from column names
+  caption <- paste(colnames(x), collapse = ", ")
+  
+  pretty_kable(
+    x,
+    caption = caption,
+    scroll = scroll,
+    height = height
+  )
+}
 
