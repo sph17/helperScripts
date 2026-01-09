@@ -52,3 +52,36 @@ save_pheatmap_pdf <- function(x, filename, width = 7, height = 7) {
 }
 
 
+# Pretty KableExtra
+pretty_kable <- function(
+    x,
+    caption = NULL,
+    col.names = NULL,
+    align = NULL,
+    scroll = FALSE,
+    height = "300px"
+) {
+  if (!requireNamespace("knitr", quietly = TRUE) ||
+      !requireNamespace("kableExtra", quietly = TRUE)) {
+    stop("Packages 'knitr' and 'kableExtra' are required.")
+  }
+  kb <- knitr::kable(
+    x,
+    caption = caption,
+    col.names = col.names,
+    align = align,
+    booktabs = TRUE
+  ) |>
+    kableExtra::kable_styling(
+      full_width = FALSE,
+      bootstrap_options = c("striped", "hover", "condensed")
+    )
+  
+  if (scroll) {
+    kb <- kb |> kableExtra::scroll_box(height = height)
+  }
+  
+  kb
+}
+
+
